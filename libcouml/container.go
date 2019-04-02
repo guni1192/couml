@@ -1,6 +1,10 @@
 package libcouml
 
-import "fmt"
+import (
+	"os"
+	"os/exec"
+	"syscall"
+)
 
 // Container -- for base container struct.
 // not support expect for Linux
@@ -21,6 +25,39 @@ func NewContainer() Container {
 
 // Run -- Container Run
 func (c *linuxContainer) Run() error {
-	fmt.Println("Container Run!")
+	// TODO: prepare something for container init
+
+	if len(os.Args) < 2 {
+		// exec itself
+		cmd := exec.Command(os.Args[0], "--child")
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	}
+
+	cmd := exec.Command("/bin/bash")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		Cloneflags: syscall.CLONE_NEWUSER | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWUTS,
+		UidMappings: []syscall.SysProcIDMap{
+			{
+				ContainerID: 0,
+				HostID:      syscall.Getuid(),
+				Size:        1,
+			},
+		},
+		GidMappings: []syscall.SysProcIDMap{
+			{
+				ContainerID: 0,
+				HostID:      syscall.Getgid(),
+				Size:        1,
+			},
+		},
+	}
+
+	return cmd.Run()
 	return nil
 }

@@ -1,8 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"os"
+
+	"github.com/urfave/cli"
+)
 
 func main() {
-	fmt.Println("Hello couml")
-	runContainer()
+	app := cli.NewApp()
+	app.Commands = []cli.Command{
+		{
+			Name:    "run",
+			Aliases: []string{"r"},
+			Usage:   "run container",
+			Action: func(c *cli.Context) error {
+				runContainer()
+				return nil
+			},
+		},
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -1,12 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/guni1192/couml/libcouml"
 )
 
 func runContainer() {
-	c := libcouml.Container{}
-	fmt.Println(c)
+	c := libcouml.NewContainer()
+	if err := c.Run(); err != nil {
+		log.Fatal("Could not container run: ", err)
+	}
 }

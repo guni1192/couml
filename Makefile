@@ -1,4 +1,5 @@
 PROJECT="github.com/guni1192/couml"
+export GO111MODULE=on
 
 all: couml
 

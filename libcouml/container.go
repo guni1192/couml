@@ -15,7 +15,7 @@ type linuxContainer struct {
 // Container -- for Container Utility
 type Container interface {
 	// Run -- Container run
-	Run() error
+	Run(process Process) error
 }
 
 // NewContainer -- return Container from linuxContainer
@@ -24,8 +24,8 @@ func NewContainer() Container {
 }
 
 // Run -- Container Run
-func (c *linuxContainer) Run() error {
-	// TODO: prepare something for container init
+func (c *linuxContainer) Run(process Process) error {
+	// TODO: prepare somethingCommand  for container init
 
 	if len(os.Args) < 2 {
 		// exec itself
@@ -36,7 +36,7 @@ func (c *linuxContainer) Run() error {
 		return cmd.Run()
 	}
 
-	cmd := exec.Command("/bin/bash")
+	cmd := exec.Command(process.Command)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -59,5 +59,4 @@ func (c *linuxContainer) Run() error {
 	}
 
 	return cmd.Run()
-	return nil
 }

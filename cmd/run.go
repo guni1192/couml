@@ -8,7 +8,7 @@ import (
 
 func runContainer() {
 	c := libcouml.NewContainer()
-	if err := c.Run(); err != nil {
+	if err := c.Run(libcouml.Process{Command: "/bin/bash"}); err != nil {
 		log.Fatal("Could not container run: ", err)
 	}
 }

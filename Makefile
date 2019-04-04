@@ -20,3 +20,6 @@ vet: **/*.go
 
 lint: **/*.go
 	golint -set_exit_status ./...
+
+install.gopath:
+	go install ./...

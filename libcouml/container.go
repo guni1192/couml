@@ -1,8 +1,10 @@
 package libcouml
 
 import (
+	"fmt"
+	"log"
 	"os"
-	"os/exec"
+	"path/filepath"
 	"syscall"
 )
 
@@ -15,7 +17,7 @@ type linuxContainer struct {
 // Container -- for Container Utility
 type Container interface {
 	// Run -- Container run
-	Run(process Process) error
+	Run(process *Process) error
 }
 
 // NewContainer -- return Container from linuxContainer
@@ -24,39 +26,27 @@ func NewContainer() Container {
 }
 
 // Run -- Container Run
-func (c *linuxContainer) Run(process Process) error {
-	// TODO: prepare somethingCommand  for container init
+func (c *linuxContainer) Run(process *Process) error {
 
-	if len(os.Args) < 2 {
-		// exec itself
-		cmd := exec.Command(os.Args[0], "--child")
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+	if err := syscall.Chroot(process.Cwd); err != nil {
+		log.Fatal("chroot failed")
+	}
+	syscall.Chdir("/")
+
+	return syscall.Exec("/bin/sh", []string{"/bin/sh"}, os.Environ())
+}
+
+// PrepareRootfs -- mount file system, change hostname
+func PrepareRootfs(config *ContainerConfig) {
+	proc := filepath.Join(config.Cwd, "/proc")
+	fmt.Println(proc)
+	if _, err := os.Stat(proc); os.IsNotExist(err) {
+		if err = os.MkdirAll(proc, 0755); err != nil {
+			log.Fatalf("mkdir %s failed: %s", proc, err)
+		}
 	}
 
-	cmd := exec.Command(process.Command)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUSER | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWUTS,
-		UidMappings: []syscall.SysProcIDMap{
-			{
-				ContainerID: 0,
-				HostID:      syscall.Getuid(),
-				Size:        1,
-			},
-		},
-		GidMappings: []syscall.SysProcIDMap{
-			{
-				ContainerID: 0,
-				HostID:      syscall.Getgid(),
-				Size:        1,
-			},
-		},
+	if err := syscall.Mount("proc", proc, "proc", 0, ""); err != nil {
+		log.Fatal("cannot mount procfs:", err)
 	}
-
-	return cmd.Run()
 }

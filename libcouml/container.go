@@ -28,9 +28,11 @@ func NewContainer() Container {
 func (c *linuxContainer) Run(process *Process) error {
 
 	if err := syscall.Chroot(process.Cwd); err != nil {
-		log.Fatal("chroot failed")
+		log.Fatal("Could not chroot", err)
 	}
-	syscall.Chdir("/")
+	if err := syscall.Chdir("/"); err != nil {
+		log.Fatal("Could not chdir / :", err)
+	}
 
 	return syscall.Exec(process.Args[0], process.Args, process.Env)
 }
@@ -40,11 +42,11 @@ func PrepareRootfs(config *ContainerConfig) {
 	proc := filepath.Join(config.Cwd, "/proc")
 	if _, err := os.Stat(proc); os.IsNotExist(err) {
 		if err = os.MkdirAll(proc, 0755); err != nil {
-			log.Fatalf("mkdir %s failed: %s", proc, err)
+			log.Fatalf("Could not mkdir %s: %s", proc, err)
 		}
 	}
 
 	if err := syscall.Mount("proc", proc, "proc", 0, ""); err != nil {
-		log.Fatal("cannot mount procfs:", err)
+		log.Fatal("Could not mount procfs:", err)
 	}
 }

@@ -8,8 +8,8 @@ import (
 type Process struct {
 	Command string // TODO: remove
 	Cwd     string // Current working directory
-	Env []string
-	Args []string
+	Env     []string
+	Args    []string
 }
 
 // NewProcess --  generate new process config.
@@ -17,15 +17,15 @@ type Process struct {
 func NewProcess(args []string, workDir string) *Process {
 	return &Process{
 		Args: args,
-		Cwd:     workDir,
+		Cwd:  workDir,
 	}
 }
 
 // newProcess -- TODO: instead of NewProcess
-func newProcess(p *specs.Process) *Process{
-	return &Process {
-		Cwd: p.Cwd,
-		Env: p.Env,
+func newProcess(p *specs.Process) *Process {
+	return &Process{
+		Cwd:  p.Cwd,
+		Env:  p.Env,
 		Args: p.Args,
 	}
 }

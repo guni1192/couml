@@ -23,7 +23,6 @@ func init() {
 			Args: []string{"/bin/sh"},
 		}
 
-
 		libcouml.PrepareRootfs(&containerConfig)
 		runContainer()
 	}

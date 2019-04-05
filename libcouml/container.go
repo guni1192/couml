@@ -1,7 +1,6 @@
 package libcouml
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -39,7 +38,6 @@ func (c *linuxContainer) Run(process *Process) error {
 // PrepareRootfs -- mount file system, change hostname
 func PrepareRootfs(config *ContainerConfig) {
 	proc := filepath.Join(config.Cwd, "/proc")
-	fmt.Println(proc)
 	if _, err := os.Stat(proc); os.IsNotExist(err) {
 		if err = os.MkdirAll(proc, 0755); err != nil {
 			log.Fatalf("mkdir %s failed: %s", proc, err)

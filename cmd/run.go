@@ -8,10 +8,10 @@ import (
 
 func runContainer() {
 	c := libcouml.NewContainer()
-	cmd := "/bin/sh"
-	workDir := "/home/vagrant/.cromwell/containers/cc3s3izSmKBWwAdj"
+	workDir := "./rootfs"
+	args := []string{"/bin/sh"}
 
-	if err := c.Run(libcouml.NewProcess(cmd, workDir)); err != nil {
+	if err := c.Run(libcouml.NewProcess(args, workDir)); err != nil {
 		log.Fatal("Could not container run: ", err)
 	}
 }

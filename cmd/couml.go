@@ -17,11 +17,12 @@ func init() {
 		runtime.LockOSThread()
 
 		// TODO: loag config from config.json
-		// containerConfig := libcouml.LoadContainerConfig()
+		// var spec specs.Spec = LoadConfigJson(path)
 		containerConfig := libcouml.ContainerConfig{
-			Cwd:  "/home/vagrant/.cromwell/containers/cc3s3izSmKBWwAdj",
+			Cwd:  "./rootfs",
 			Args: []string{"/bin/sh"},
 		}
+
 
 		libcouml.PrepareRootfs(&containerConfig)
 		runContainer()

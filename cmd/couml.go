@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/guni1192/couml/libcouml"
+	"github.com/opencontainers/runtime-spec/specs-go"
 	"github.com/urfave/cli"
 )
 
@@ -17,14 +18,11 @@ func init() {
 		runtime.LockOSThread()
 
 		// TODO: loag config from config.json
-		// var spec specs.Spec = LoadConfigJson(path)
-		containerConfig := libcouml.ContainerConfig{
-			Cwd:  "./rootfs",
-			Args: []string{"/bin/sh"},
-		}
+		p := &specs.Process{Args: []string{"/bin/sh"}, Cwd: "./rootfs"}
+		process := libcouml.NewProcess(p)
 
-		libcouml.PrepareRootfs(&containerConfig)
-		runContainer()
+		libcouml.PrepareRootfs(process)
+		runContainer(process)
 	}
 }
 

@@ -6,12 +6,10 @@ import (
 	"github.com/guni1192/couml/libcouml"
 )
 
-func runContainer() {
+func runContainer(process *libcouml.Process) {
 	c := libcouml.NewContainer()
-	workDir := "./rootfs"
-	args := []string{"/bin/sh"}
 
-	if err := c.Run(libcouml.NewProcess(args, workDir)); err != nil {
+	if err := c.Run(process); err != nil {
 		log.Fatal("Could not container run: ", err)
 	}
 }

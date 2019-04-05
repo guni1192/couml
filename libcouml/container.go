@@ -38,8 +38,8 @@ func (c *linuxContainer) Run(process *Process) error {
 }
 
 // PrepareRootfs -- mount file system, change hostname
-func PrepareRootfs(config *ContainerConfig) {
-	proc := filepath.Join(config.Cwd, "/proc")
+func PrepareRootfs(process *Process) {
+	proc := filepath.Join(process.Cwd, "/proc")
 	if _, err := os.Stat(proc); os.IsNotExist(err) {
 		if err = os.MkdirAll(proc, 0755); err != nil {
 			log.Fatalf("Could not mkdir %s: %s", proc, err)

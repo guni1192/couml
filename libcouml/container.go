@@ -32,7 +32,7 @@ func (c *linuxContainer) Run(process *Process) error {
 	}
 	syscall.Chdir("/")
 
-	return syscall.Exec("/bin/sh", []string{"/bin/sh"}, os.Environ())
+	return syscall.Exec(process.Args[0], process.Args, process.Env)
 }
 
 // PrepareRootfs -- mount file system, change hostname

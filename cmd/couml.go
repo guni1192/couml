@@ -18,10 +18,7 @@ func init() {
 
 		spec := libcouml.LoadConfig("./config.json")
 
-		// p := &specs.Process{Args: []string{"/bin/sh"}, Cwd: "./rootfs"}
-
 		process := libcouml.NewProcess(spec.Process)
-		log.Println(process)
 
 		libcouml.PrepareRootfs(spec)
 		runContainer(process)

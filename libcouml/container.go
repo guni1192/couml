@@ -29,6 +29,8 @@ func NewContainer() Container {
 
 // Run -- Container Run
 func (c *linuxContainer) Run(process *Process) error {
+	setEnv(process.Env)
+
 	command, err := exec.LookPath(process.Args[0])
 
 	if err != nil {

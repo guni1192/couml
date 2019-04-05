@@ -6,9 +6,9 @@ import (
 
 // Process -- have process state
 type Process struct {
-	Cwd     string // Current working directory
-	Env     []string
-	Args    []string
+	Cwd  string // Current working directory
+	Env  []string
+	Args []string
 }
 
 // NewProcess --  generate new process config.

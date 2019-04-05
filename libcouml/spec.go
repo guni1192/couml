@@ -1,10 +1,10 @@
 package libcouml
 
 import (
-	"log"
-	"io/ioutil"
 	"encoding/json"
 	specs "github.com/opencontainers/runtime-spec/specs-go"
+	"io/ioutil"
+	"log"
 )
 
 // LoadConfig -- Load spec info from configPath

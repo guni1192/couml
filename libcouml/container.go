@@ -31,7 +31,7 @@ func NewContainer() Container {
 func (c *linuxContainer) Run(process *Process) error {
 	command, err := exec.LookPath(process.Args[0])
 
-	if err !=nil  {
+	if err != nil {
 		log.Fatalf("Could not LookPath %s : %s", process.Args[0], err)
 	}
 

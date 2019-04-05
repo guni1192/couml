@@ -6,7 +6,6 @@ import (
 
 // Process -- have process state
 type Process struct {
-	Command string // TODO: remove
 	Cwd     string // Current working directory
 	Env     []string
 	Args    []string
